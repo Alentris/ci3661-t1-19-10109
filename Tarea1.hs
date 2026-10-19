@@ -1,10 +1,12 @@
 -- =====================================================================
 --  CI-3661 — Tarea 1 (Haskell) — Septiembre–Diciembre 2026
 --
---  Nombre:
---  Carnet:
+--  Nombre: Alejandro De Vincenzo
+--  Carnet: 19-10109
 --
---  Declaración de uso de herramientas de IA (obligatoria, ver enunciado):
+--  Declaración de uso de herramientas de IA (obligatoria, ver enunciado): Gemini
+--  Declaro haber usado Gemini para consultar errores y recordar cómo usar funciones
+--  básicas del propio Haskell.
 --
 -- =====================================================================
 --  No cambies el nombre del módulo ni la lista de exportación, ni las
@@ -34,7 +36,23 @@ import Data.Char (isAlphaNum, isDigit, toLower, digitToInt)
 
 -- A1
 esPalindromo :: String -> Bool
-esPalindromo = undefined
+esPalindromo a
+  | alfaNumerico (minuscula a) == inverso (alfaNumerico (minuscula a)) = True
+  | otherwise = False
+
+inverso :: String -> String
+inverso "" = ""
+inverso (x:xs) = inverso xs ++ [x]
+
+minuscula :: String -> String
+minuscula "" = ""
+minuscula (x:xs) = [toLower x] ++ minuscula xs
+
+alfaNumerico :: String -> String
+alfaNumerico "" = ""
+alfaNumerico (x:xs)
+  | isAlphaNum x = [x] ++ alfaNumerico xs
+  | otherwise = alfaNumerico xs
 
 -- A2
 -- Explica aquí, en dos o tres líneas, por qué tu solución recorre la
