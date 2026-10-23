@@ -56,10 +56,24 @@ alfaNumerico (x:xs)
 
 -- A2
 -- Explica aquí, en dos o tres líneas, por qué tu solución recorre la
--- lista una sola vez:
---
+-- lista una sola vez: porque en cada paso recursivo se hace una sola llamada
+-- a la función para la cola de la lista (xs), actualizando el máximo y el
+-- mínimo simultáneamente de manera lineal.
+
 mayorYMenor :: Ord a => [a] -> Maybe (a, a)
-mayorYMenor = undefined
+mayorYMenor [] = Nothing
+mayorYMenor [x] = Just (x, x)
+mayorYMenor (x:xs) = a (mayorYMenor xs)
+  where
+    a Nothing = Just (x, x)
+    a (Just (maxCola, minCola)) = Just (maxNuevo, minNuevo)
+      where
+        maxNuevo
+          | x > maxCola = x 
+          | otherwise   = maxCola
+        minNuevo
+          | x < minCola = x 
+          | otherwise   = minCola
 
 -- A3
 leerHora :: String -> Either String (Int, Int)
