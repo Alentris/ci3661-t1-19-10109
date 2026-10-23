@@ -5,8 +5,10 @@
 --  Carnet: 19-10109
 --
 --  Declaración de uso de herramientas de IA (obligatoria, ver enunciado): Gemini
---  Declaro haber usado Gemini para consultar errores y recordar cómo usar funciones
---  básicas del propio Haskell.
+--  Declaro haber usado Gemini para consultar errores y recordar cómo  
+--  usar funciones básicas del propio Haskell. Ya hacia el final me estaba
+--  quedando sin tiempo, así que le empecé a pedir ayuda a Gemini cuando
+--  me quedaba trancado en algún ejercicio, le pedía pistas.
 --
 -- =====================================================================
 --  No cambies el nombre del módulo ni la lista de exportación, ni las
@@ -112,14 +114,35 @@ duracion hora1 hora2 = evaluarHora1 (leerHora hora1)
 
 -- B1
 promedioSobreUmbral :: Double -> [Double] -> Maybe Double
-promedioSobreUmbral = undefined
+promedioSobreUmbral umbral xs = 
+    -- La IA me carreó aquí diciéndome que ponga el :: Int, porque sin
+    -- antes me lanzaba un warning en la compilación que no supe
+    -- resolver.
+    let (suma, cuenta) = foldr paso (0.0, 0 :: Int) xs
+    in if cuenta == 0 
+       then Nothing 
+       else Just (suma / fromIntegral cuenta)
+  where
+    paso x (suma, cuenta)
+      | x > umbral = (suma + x, cuenta + 1)
+      | otherwise  = (suma, cuenta)
 
 -- B2
 movimientosCaballo :: (Int, Int) -> [(Int, Int)]
-movimientosCaballo = undefined
+movimientosCaballo (r, c) = 
+    [ (r + dr, c + dc) 
+    | (dr, dc) <- [(-2,-1), (-2,1), (-1,-2), (-1,2), (1,-2), (1,2), (2,-1), (2,1)]
+    , let r' = r + dr
+    , let c' = c + dc
+    , r' >= 1 && r' <= 8 && c' >= 1 && c' <= 8
+    ]
 
 enDosSaltos :: (Int, Int) -> Int
-enDosSaltos = undefined
+enDosSaltos s = 
+    length (eliminarDuplicados (s : concatMap movimientosCaballo (movimientosCaballo s)))
+
+eliminarDuplicados :: Eq a => [a] -> [a]
+eliminarDuplicados = foldr (\x acc -> if elem x acc then acc else x : acc) []    
 
 -- B3
 miMap :: (a -> b) -> [a] -> [b]
