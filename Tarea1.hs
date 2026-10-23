@@ -123,10 +123,15 @@ enDosSaltos = undefined
 
 -- B3
 miMap :: (a -> b) -> [a] -> [b]
-miMap = undefined
+miMap f = foldr (\x acc -> f x : acc) []
 
 miFilter :: (a -> Bool) -> [a] -> [a]
-miFilter = undefined
+miFilter p = foldr paso []
+  where
+    paso x acc = filtrar (p x) x acc
+
+    filtrar True  x acc = x : acc
+    filtrar False _ acc = acc
 
 miFoldl :: (b -> a -> b) -> b -> [a] -> b
-miFoldl = undefined
+miFoldl f z xs = foldr (\x g acc -> g (f acc x)) (\acc -> acc) xs z
