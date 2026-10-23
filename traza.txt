@@ -1,0 +1,55 @@
+(a) foldr (-) 0 d hasta llegar a un número.
+
+foldr (-) 0 [0, 1, 0, 9]
+= 0 - (foldr (-) 0 [1, 0, 9])
+= 0 - (1 - (foldr (-) 0 [0, 9]))
+= 0 - (1 - (0 - (foldr (-) 0 [9])))
+= 0 - (1 - (0 - (9 - (foldr (-) 0 []))))
+= 0 - (1 - (0 - (9 - 0)))
+= 0 - (1 - (0 - 9))
+= 0 - (1 - (-9))
+= 0 - 10
+= -10
+
+
+
+(b) foldl (-) 0 d hasta llegar a un número.
+
+foldl (-) 0 [0, 1, 0, 9]
+= foldl (-) (0 - 0) [1, 0, 9]
+= foldl (-) ((0 - 0) - 1) [0, 9]
+= foldl (-) (((0 - 0) - 1) - 0) [9]
+= foldl (-) ((((0 - 0) - 1) - 0) - 9) []
+= (((0 - 0) - 1) - 0) - 9
+= ((0 - 1) - 0) - 9
+= (-1 - 0) - 9
+= -1 - 9
+= -10
+
+
+
+(c) Con tu definición de miFoldl, la reducción de miFoldl (-) 0 [d1, d2], donde d1 y d2 son los dos
+primeros dígitos de d. Cada paso debe corresponder a una ecuación de tu código o a una regla de
+β-reducción.
+
+miFoldl (-) 0 [0, 1]
+= foldr (\x g acc -> g (acc - x)) (\acc -> acc) [0, 1] 0
+= (\x g acc -> g (acc - x)) 0 (foldr (\x g acc -> g (acc - x)) (\acc -> acc) [1]) 0
+= (\x g acc -> g (acc - x)) 0 ((\x g acc -> g (acc - x)) 1 (foldr (\x g acc -> g (acc - x)) (\acc -> acc) [])) 0
+= (\x g acc -> g (acc - x)) 0 ((\x g acc -> g (acc - x)) 1 (\acc -> acc)) 0
+= (\x g acc -> g (acc - x)) 0 (\acc -> (\acc' -> acc') (acc - 1)) 0
+= (\x g acc -> g (acc - x)) 0 (\acc -> acc - 1) 0
+= (\acc -> (\acc' -> acc' - 1) (acc - 0)) 0
+= (0 - 0) - 1
+= 0 - 1
+= -1
+
+
+
+(d) Explica en un párrafo por qué (a) y (b) dan distinto, y da una condición sobre el operador op y
+el valor z que garantice que foldr op z xs == foldl op z xs para toda lista finita xs.
+
+Bueno, justo en mi caso los resultados de (a) y (b) son el mismo xd, pero se supone que 
+foldr y foldl dan distinto porque foldl asocia a la izquierda y foldr asocia a la derecha.
+Como la resta no es asociativa, entonces el orden en el que se agrupan los paréntesis 
+cambia la evaluación.
