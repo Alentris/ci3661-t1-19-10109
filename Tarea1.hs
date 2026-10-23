@@ -77,10 +77,32 @@ mayorYMenor (x:xs) = a (mayorYMenor xs)
 
 -- A3
 leerHora :: String -> Either String (Int, Int)
-leerHora = undefined
+leerHora [h1, h2, ':', m1, m2]
+  | not (isDigit h1 && isDigit h2 && isDigit m1 && isDigit m2) = Left "formato inválido"
+  | hora > 23  = Left "hora fuera de rango"
+  | minuto > 59  = Left "minutos fuera de rango"
+  | otherwise = Right (hora, minuto)
+  where
+    hora = digitToInt h1 * 10 + digitToInt h2
+    minuto = digitToInt m1 * 10 + digitToInt m2
+leerHora _ = Left "formato inválido"
 
 duracion :: String -> String -> Either String Int
-duracion = undefined
+duracion hora1 hora2 = evaluarHora1 (leerHora hora1)
+  where
+    evaluarHora1 (Left error1) = Left error1
+    evaluarHora1 (Right t1)  = evaluarHora2 (leerHora hora2) t1
+
+    evaluarHora2 (Left error2) _  = Left error2
+    evaluarHora2 (Right t2)  (h1, m1) = calcularDiferencia (h1, m1) t2
+
+    calcularDiferencia (h1, m1) (h2, m2) =
+        let totalMinutos1 = h1 * 60 + m1
+            totalMinutos2 = h2 * 60 + m2
+            diferencia = totalMinutos2 - totalMinutos1
+        in if diferencia >= 0 
+           then Right diferencia 
+           else Right (diferencia + 24 * 60)
 
 -- =====================================================================
 -- Parte B: orden superior.
